@@ -30,7 +30,7 @@ const [location, setLocation] = useState();
 
    useEffect(() => {
        getLocation();
-   })
+   }, [])
 
    return location
 }

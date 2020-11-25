@@ -2,14 +2,13 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from "@material-ui/core/styles"
-import {TextField, Typography, Grid, makeStyles} from '@material-ui/core';
+import {Grid, makeStyles} from '@material-ui/core';
 
 import useLocation from './hooks/useLocation';
 import MyCard from './components/AppCard';
 import AppList from './components/AppList';
 import theme from "./theme";
 import NavBar from "./components/NavBar";
-
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,10 +50,9 @@ const getForecast = async () => {
       }
     }
 
-    if(typeof searchTerm != 'undefined' || typeof userLocation != 'undefined'){
-      console.log("searchTerm", searchTerm);
-      console.log("userLocation", userLocation);
-    const response = await axios.get("http://api.weatherapi.com/v1/forecast.json", config);
+    if(typeof userLocation != 'undefined'){
+      console.log("calling api");
+    const response = await axios.get("https://api.weatherapi.com/v1/forecast.json", config);
     console.log("response", response);
     setLocation(response.data.location);
     setCurrentWeather(response.data.current);
@@ -68,8 +66,15 @@ const getForecast = async () => {
 }
 
 
-const handleSubmit = () => {
-  getForecast();
+// const handleSubmit = () => {
+//   getForecast();
+// }
+
+const handleKeyPress = (e) => {
+  if (e.key === "Enter"){
+    console.log("enter pressed")
+    getForecast();
+  }
 }
 
 const handleChange = (e) => {
@@ -86,6 +91,7 @@ setSearchTerm(e.target.value)
       title="Weather App"
       onChange={(e) => handleChange(e)}
       searchTerm={searchTerm}
+      onKeyPress={(e) => handleKeyPress(e)}
       />
 {/* <TextField
 placeholder="Search for a location"

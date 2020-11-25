@@ -51,7 +51,7 @@ searchIcon: {
 
 }));
 
-function NavBar({searchTerm, onChange, title}) {
+function NavBar({searchTerm, onChange, title, onKeyPress}) {
 const classes = useStyles();
 
   return (
@@ -82,6 +82,7 @@ const classes = useStyles();
                 }}
                 onChange={(e) => onChange(e)}
                 value={searchTerm}
+                onKeyPress={(e) => onKeyPress(e)}
                   />
               </div>
           </Toolbar>
