@@ -2,13 +2,20 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from "@material-ui/core/styles"
-import {TextField, Typography, Grid} from '@material-ui/core';
+import {TextField, Typography, Grid, makeStyles} from '@material-ui/core';
 
 import useLocation from './hooks/useLocation';
 import MyCard from './components/AppCard';
 import AppList from './components/AppList';
 import theme from "./theme";
 import NavBar from "./components/NavBar";
+
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: 20,
+  },
+}));
 
 function App() {
   const initialLocation = {
@@ -27,6 +34,7 @@ function App() {
   const [forecast, setForecast] = useState(initialForecast);
   const [searchTerm, setSearchTerm] = useState();
   const userLocation = useLocation();
+  const classes = useStyles();
   
 useEffect(() => {
   getForecast();
@@ -74,16 +82,16 @@ setSearchTerm(e.target.value)
     theme={theme}
     >
     <CssBaseline>
-      <NavBar/>
-   <Typography>
-     Weather App
-   </Typography>
-
-<TextField
+      <NavBar
+      title="Weather App"
+      onChange={(e) => handleChange(e)}
+      searchTerm={searchTerm}
+      />
+{/* <TextField
 placeholder="Search for a location"
-onChange={handleChange}
+onChange={(e) => handleChange(e)}
 value={searchTerm}
-/>
+/> */}
 {/* <Button
 onClick={handleSubmit}
 >
@@ -95,6 +103,7 @@ container
 direction="row"
 justify="center"
 alignItems="flex-start"
+className={classes.container}
 >
 <MyCard
 location={location}

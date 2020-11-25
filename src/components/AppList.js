@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 20,
         paddingLeft: 20,
         paddingRight: 20,
+        width: 200,
+        height: 350,
     }
   }));
 
@@ -21,7 +23,7 @@ function AppList({data, title}) {
       >    
          {/* <Typography variant="h4">{title}</Typography> */}
     <List>
-    {data.map((day) => (
+    {data.map((day, index) => (
         <>
         <ListItem key={day.date_epoch}>
             <ListItemText
@@ -37,18 +39,20 @@ function AppList({data, title}) {
                 <Typography
                 variant="subtitle2"
                 >
-                    High {day.day.maxtemp_f}
+                    High {day.day.maxtemp_f} F
                 </Typography>
                 <Typography
                 variant="subtitle2"
                 >
-                    Low {day.day.mintemp_f}
+                    Low {day.day.mintemp_f} F
                 </Typography>
                 </>
             }
             />
         </ListItem>
-        <Divider  component="li" />
+       {index !== data.length - 1 && (
+           <Divider  component="li" />
+       )} 
         </>
     ))}
     </List>
