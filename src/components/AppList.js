@@ -1,35 +1,60 @@
 import React from 'react';
-import {List, ListItem, ListItemText, Paper, Typography, Divider} from '@material-ui/core';
+import PropTypes from "prop-types";
+import {List, ListItem, ListItemText, Paper, Typography, Divider, CircularProgress, ListItemAvatar} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     container: {
         marginLeft: 20,
         paddingLeft: 20,
         paddingRight: 20,
         width: 200,
         height: 350,
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex"
+    },
+    loadingContainer: {
+        width: 240,
+        height: 370,
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex"
     }
   }));
 
-function AppList({data, title}) {
+function AppList({data, loading}) {
     const classes = useStyles();
-  return (
+    
+    return (
       <>
       <Paper 
       className={classes.container}
       elevation={3}
       >    
-         {/* <Typography variant="h4">{title}</Typography> */}
-    <List>
+      {loading && (
+              <CircularProgress/>
+      ) }
+
+{data && (<List>
     {data.map((day, index) => (
         <>
         <ListItem key={day.date_epoch}>
+            <ListItemAvatar>
+                {/* {day.day.conditon.icon && ( */}
+                    <img src={day.day.condition.icon}
+                    height="50"
+                    width="50"
+                    />
+                {/* )} */}
+            </ListItemAvatar>
             <ListItemText
+            component='div'
             primary={
                 <Typography
                 variant="h6"
+                component="span"
                 >
                      {moment.unix(day.date_epoch).utc().format("dddd")}
                 </Typography>
@@ -51,14 +76,21 @@ function AppList({data, title}) {
             />
         </ListItem>
        {index !== data.length - 1 && (
-           <Divider  component="li" />
+           <Divider key={index} component="li" />
        )} 
         </>
     ))}
     </List>
+    )}
+     
     </Paper>
     </>
   );
+}
+
+AppList.propTypes = {
+    data: PropTypes.array.isRequired,
+    loading: PropTypes.bool
 }
 
 

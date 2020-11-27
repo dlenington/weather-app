@@ -1,9 +1,12 @@
 import React from 'react';
-import {Paper, Typography} from '@material-ui/core';
+import PropTypes from "prop-types";
+import {fade, Paper, Typography} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from "moment";
 import { makeStyles } from '@material-ui/core/styles';
+import theme from '../theme';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
       marginRight: 20,
       paddingLeft: 20,
@@ -16,13 +19,6 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       flexDirection: "column",
   },
-  // contentContainer: {
-  //   width: '100%',
-  //   height: 30,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   display: "flex"
-  // },
   iconContainer: {
     width: '100%',
     justifyContent: "center",
@@ -32,13 +28,26 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#000'
-    }
+    backgroundColor: fade(theme.palette.primary.light, 0.25)
+    },
+    textLoadingLarge: {
+      height: 50,
+      width: 150,
+      marginTop: 10,
+      backgroundColor: fade(theme.palette.primary.light, 0.25)
+    },
+    textLoading: {
+      height: 25,
+      width: 200,
+      marginTop: 10,
+      backgroundColor: fade(theme.palette.primary.light, 0.25)
+    },
 }));
 
 
-function AppCard({location, currentWeather, title}) {
+function AppCard({location, currentWeather, loading}) {
   const classes = useStyles();
+
   return (
     <div>
     <Paper
@@ -46,39 +55,58 @@ function AppCard({location, currentWeather, title}) {
     className={classes.container}
     >
   
-  <div
-className={classes.iconContainer}
->
-  {currentWeather.condition.icon ? (
-      <img src={currentWeather.condition.icon} width="100" height="100"></img>
+  <div className={classes.iconContainer}>
+  {loading || !currentWeather ? (
+    <CircularProgress/>
   ) : (
-<div className={classes.iconLoading}></div>
+    <img 
+    src={currentWeather.condition.icon} 
+    width="100" 
+    height="100"
+    />
   )}</div>
 
+{!loading && (
+<>
 <div
 className={classes.contentContainer}
 >
-
-  <Typography 
+  
+  {currentWeather.temp_f && <Typography 
   variant="h3"
   >
     {currentWeather.temp_f} F
-    </Typography>
+    </Typography>}
 </div>
+ 
+  <Typography
+  variant="h5"
+  data-testid="location-name"
+  >
+    {location.name}
+  </Typography>
+  
   <Typography
   variant="h5"
   >
-    {location.name}
-    </Typography>
-  <Typography
-  variant="h5"
-  >{location.region}</Typography>
-  <Typography>{moment.unix(currentWeather.last_updated_epoch).format("dddd")}</Typography>
-  
-  <Typography>{currentWeather.temp_c} C</Typography>
+    {location.region}
+  </Typography>
+  {currentWeather.last_updated_epoch && (
+  <Typography>
+    {moment.unix(currentWeather.last_updated_epoch).format("dddd")}
+</Typography>
+)}
+</>
+)}
 </Paper>
 </div>
   );
+}
+
+AppCard.propTypes = {
+  location: PropTypes.object.isRequired,
+  currentWeather: PropTypes.object.isRequired,
+  loading: PropTypes.bool
 }
 
 

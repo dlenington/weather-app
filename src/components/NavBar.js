@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,7 +27,6 @@ inputInput: {
 search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    // backgroundColor: '#000',
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
         backgroundColor: fade(theme.palette.common.white, 0.25),
@@ -51,7 +51,7 @@ searchIcon: {
 
 }));
 
-function NavBar({searchTerm, onChange, title, onKeyPress}) {
+function NavBar({ onChange, title, onKeyPress}) {
 const classes = useStyles();
 
   return (
@@ -81,7 +81,6 @@ const classes = useStyles();
                     input: classes.inputInput
                 }}
                 onChange={(e) => onChange(e)}
-                value={searchTerm}
                 onKeyPress={(e) => onKeyPress(e)}
                   />
               </div>
@@ -89,6 +88,12 @@ const classes = useStyles();
       </AppBar>
       </div>
   );
+}
+
+NavBar.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    onKeyPress: PropTypes.func.isRequired,
+    title: PropTypes.string
 }
 
 export default NavBar;
